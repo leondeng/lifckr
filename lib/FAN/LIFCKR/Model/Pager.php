@@ -43,14 +43,17 @@ class Pager extends BaseObject
   }
 
   public function getLastPageUrl() {
-    return $this->getUrl().$this->pages;
+    return sprintf($this->getUrl(), $this->text, $this->pages);
   }
 
   public function generatePageItems() {
     $this->pageItems = array();
 
-    $n = 1;
-    if ($this->page > 2) {
+    if ($this->page <= 5) {
+      $n = 1;
+    } elseif ($this->page + 2 > $this->pages) {
+      $n = $this->pages - 4;
+    } else {
       $n = $this->page - 2;
     }
 
@@ -59,7 +62,7 @@ class Pager extends BaseObject
       $this->pageItems[$n] = sprintf($this->getUrl(), $this->text, $n);
       $n++;
       $i++;
-    } while ($n < $this->pages && $i < 5);
+    } while ($n <= $this->pages && $i < 5);
   }
 
   public function getPageItems() {
